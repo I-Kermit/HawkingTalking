@@ -1,8 +1,9 @@
 import RPi.GPIO as GPIO
 from gpios import gpios
-import threading
 
 class sp0256al2Driver(object):
+
+    TEN_MS_SILENCE = [0x00]
 
     def __init__(self):
         self.__allophone = gpios(6)
@@ -36,25 +37,23 @@ class sp0256al2Driver(object):
         return [self.__addressPins['A1'], self.__addressPins['A2'], self.__addressPins['A3'], self.__addressPins['A4'], self.__addressPins['A5'], self.__addressPins['A6']]
 
     def playParagraph(self, paragraph):
-        lock = threading.Lock()
         # Use GPIO numbers
         GPIO.setmode(GPIO.BCM)
 
         for val in paragraph:
             print('.', end='', flush=True)
-            with lock:
-                self.__allophone.convertOutput(val)
-                GPIO.output(self.__getChannelList(), self.__allophone.getOutput())
-                self.__ald()
-                self.__lrqWait()
+            self.__allophone.convertOutput(val)
+            GPIO.output(self.__getChannelList(), self.__allophone.getOutput())
+            self.__ald()
+            self.__lrqWait()
 
         GPIO.cleanup()
         print('')
 
     def cleanUp(self):
+        self.playParagraph(self.TEN_MS_SILENCE)
         print('')
         print('Cleaning up.')
-        GPIO.cleanup()
         
     def printDiagnostics(self):
         print ('Revision = ',GPIO.RPI_REVISION)
