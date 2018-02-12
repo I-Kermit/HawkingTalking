@@ -16,9 +16,6 @@ def tryClockAllophone(key):
 simpleClock = SimpleClock.SimpleClock()
 time = simpleClock.MilitaryClock()
 
-# Test only
-# time = '10 0 1 hours'
-
 print("time: %s" % time)
 
 paragraph = []
