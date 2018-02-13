@@ -36,7 +36,7 @@ for word in time.split():
         wordAsAllophones, _ = tryClockAllophone(str(tens*10))
         paragraph.extend(wordAsAllophones)
         paragraph.extend(PAUSE)
-	
+
         wordAsAllophones, _ = tryClockAllophone(str(units))
         paragraph.extend(wordAsAllophones)
 
