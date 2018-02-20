@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{fcb128c8-623f-43de-b3ba-4127aeb3e21c}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>gpios.py</StartupFile>
+    <StartupFile>sp0256al2.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -24,11 +24,26 @@
   <ItemGroup>
     <Compile Include="gpios.py" />
     <Compile Include="sp0256al2.py" />
+    <Compile Include="sp0256al2_clock\simple_clock.py" />
+    <Compile Include="sp0256al2_clock\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="sp0256al2_driver.py" />
     <Compile Include="sp0256al2_military_clock.py" />
+    <Compile Include="sp0256al2_words\allophones.py" />
+    <Compile Include="sp0256al2_words\convert.py" />
+    <Compile Include="sp0256al2_words\miscellaneous.py" />
+    <Compile Include="sp0256al2_words\numbers.py" />
+    <Compile Include="sp0256al2_words\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|VisualStudio|Python 3.6 64bit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="sp0256al2_clock\" />
+    <Folder Include="sp0256al2_words\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

@@ -1,53 +1,60 @@
+""" Hawking Talking Military clock demonstration """
 import sys
 
-from clock import SimpleClock
-from sp0256al2_driver import sp0256al2Driver
-from sp0256al2 import clockAllophoneDictionary
+from sp0256al2_clock.simple_clock import SimpleClock
+from sp0256al2_driver import Sp0256al2Driver
+from sp0256al2_words import CLOCK_ALLOPHONE_DICTIONARY
 
 PAUSE = [0]
 
-def tryClockAllophone(key):
+def try_clock_allophone(key):
+    """Test a clock allophone word exists in the dictionary.
+
+        Keyword arguments:
+        key -- string to search
+
+        returns -- (allophone, flag)
+        """
+
     try:
-        return clockAllophoneDictionary[key], True
-    except:
+        return CLOCK_ALLOPHONE_DICTIONARY[key], True
+    except KeyError:
         return key, False
 
-
-simpleClock = SimpleClock.SimpleClock()
-time = simpleClock.MilitaryClock()
+SIMPLE_CLOCK = SimpleClock()
+TIME = SIMPLE_CLOCK.military_clock()
 
 # Test only
 # time = '10 0 1 hours'
 
-print("time: %s" % time)
+print("time: %s" % TIME)
 
-paragraph = []
+PARAGRAPH = []
 
-for word in time.split():
-    wordAsAllophones, wordAsAllophonesFlag = tryClockAllophone(word)
+for word in TIME.split():
+    word_as_allophones, word_as_allophones_flag = try_clock_allophone(word)
 
-    if wordAsAllophonesFlag:
-
+    if word_as_allophones_flag:
         if word == '0':
-            wordAsAllophones, _ = tryClockAllophone('oh')
-        paragraph.extend(wordAsAllophones)
+            word_as_allophones, _ = try_clock_allophone('oh')
+        PARAGRAPH.extend(word_as_allophones)
     else:
         tens, units = divmod(int(word), 10)
-        wordAsAllophones, _ = tryClockAllophone(str(tens*10))
-        paragraph.extend(wordAsAllophones)
-        paragraph.extend(PAUSE)
+        word_as_allophones, _ = try_clock_allophone(str(tens*10))
+        PARAGRAPH.extend(word_as_allophones)
+        PARAGRAPH.extend(PAUSE)
 
-        wordAsAllophones, _ = tryClockAllophone(str(units))
-        paragraph.extend(wordAsAllophones)
+        word_as_allophones, _ = try_clock_allophone(str(units))
+        PARAGRAPH.extend(word_as_allophones)
 
-    paragraph.extend(PAUSE)
+    PARAGRAPH.extend(PAUSE)
 
 try:
     print("Start talking.")
-    sp0256 = sp0256al2Driver()
-    sp0256.playParagraph(paragraph)
+    SP0256 = Sp0256al2Driver()
+    SP0256.play_paragraph(PARAGRAPH)
 except KeyboardInterrupt:
-    sp0256.cleanUp();
+    SP0256.clean_up()
 finally:
     print("Stop talking.")
     sys.exit(0)

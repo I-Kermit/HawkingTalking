@@ -1,60 +1,78 @@
+""" Driver for the SPo256-AL2 speech synthesiser chip """
 import RPi.GPIO as GPIO
-from gpios import gpios
+from gpios import Gpios
 
-class sp0256al2Driver(object):
-
+class Sp0256al2Driver(object):
+    """ SP0256-AL2 driver specifically for the Raspberry Pi """
     TEN_MS_SILENCE = [0x00]
 
     def __init__(self):
-        self.__allophone = gpios(6)
-        self.__addressPins = {'A1':5,'A2':6,'A3':13,'A4':19,'A5':26,'A6':21}
-        self.__aldPin      = {'ALD':20}
-        self.__lrqPin      = {'LRQ':16}
+        self.__allophone = Gpios(6)
+        self.__address_pins = {'A1':5, 'A2':6, 'A3':13, 'A4':19, 'A5':26, 'A6':21}
+        self.__ald_pin = {'ALD':20}
+        self.__lrq_pin = {'LRQ':16}
 
         # Use GPIO numbers
         GPIO.setmode(GPIO.BCM)
 
-        # Setup pin directions.
-        for pin in self.__addressPins.values():
+        # Set-up pin directions.
+        for pin in self.__address_pins.values():
             # print('Address pin = ',pin)
             GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
 
-        GPIO.setup(self.__aldPin.get('ALD'), GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(self.__lrqPin.get('LRQ'), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.__ald_pin.get('ALD'), GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(self.__lrq_pin.get('LRQ'), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def __ald(self):
-        GPIO.output(self.__aldPin.get('ALD'),GPIO.LOW)
-        GPIO.output(self.__aldPin.get('ALD'),GPIO.HIGH)
+        GPIO.output(self.__ald_pin.get('ALD'), GPIO.LOW)
+        GPIO.output(self.__ald_pin.get('ALD'), GPIO.HIGH)
 
     def __lrq(self):
-        return GPIO.input(self.__lrqPin.get('LRQ'))
+        return GPIO.input(self.__lrq_pin.get('LRQ'))
 
-    def __lrqWait(self):
-        while(self.__lrq()):
+    def __lrq_wait(self):
+        while self.__lrq():
             pass
 
-    def __getChannelList(self):
-        return [self.__addressPins['A1'], self.__addressPins['A2'], self.__addressPins['A3'], self.__addressPins['A4'], self.__addressPins['A5'], self.__addressPins['A6']]
+    def __get_channel_list(self):
+        return [self.__address_pins['A1'], \
+                self.__address_pins['A2'], \
+                self.__address_pins['A3'], \
+                self.__address_pins['A4'], \
+                self.__address_pins['A5'], \
+                self.__address_pins['A6']]
 
-    def playParagraph(self, paragraph):
+    def play_paragraph(self, paragraph):
+        """
+        play_paragraph(self, paragraph)
+        paragraph: Allophones to send to SP0256-AL2
+        """
+
         # Use GPIO numbers
         GPIO.setmode(GPIO.BCM)
 
         for val in paragraph:
             print('.', end='', flush=True)
-            self.__allophone.convertOutput(val)
-            GPIO.output(self.__getChannelList(), self.__allophone.getOutput())
+            self.__allophone.convert_output(val)
+            GPIO.output(self.__get_channel_list(), self.__allophone.get_output())
             self.__ald()
-            self.__lrqWait()
+            self.__lrq_wait()
 
         GPIO.cleanup()
         print('')
 
-    def cleanUp(self):
-        self.playParagraph(self.TEN_MS_SILENCE)
+    def clean_up(self):
+        """
+        clean_up()
+        Add this call in your application when keyboard interrupt is received.
+        """
+
+        self.play_paragraph(self.TEN_MS_SILENCE)
         print('')
         print('Cleaning up.')
-        
-    def printDiagnostics(self):
-        print ('Revision = ',GPIO.RPI_REVISION)
-        print ('GPIO S/W = ',GPIO.VERSION)
+
+    @classmethod
+    def print_diagnostics(cls):
+        """ Diagnostics for the Raspberry Pi GPIOs """
+        print('Revision = ', GPIO.RPI_REVISION)
+        print('GPIO S/W = ', GPIO.VERSION)
