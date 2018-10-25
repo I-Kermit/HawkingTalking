@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """ Hawking Talking Demonstration. """
 import sys
 from sp0256al2_driver import Sp0256al2Driver
@@ -90,7 +92,7 @@ try:
     SP0256 = Sp0256al2Driver()
     SP0256.play_paragraph(PARAGRAPH)
 except KeyboardInterrupt:
-    SP0256.cleanUp()
+    SP0256.clean_up()
 finally:
     print("Stop talking.")
     sys.exit(0)

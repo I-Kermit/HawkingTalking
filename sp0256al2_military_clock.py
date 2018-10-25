@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """ Hawking Talking Military clock demonstration """
 import sys
 
