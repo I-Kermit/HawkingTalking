@@ -2,15 +2,16 @@
 import RPi.GPIO as GPIO
 from gpios import Gpios
 
+
 class Sp0256al2Driver(object):
     """ SP0256-AL2 driver specifically for the Raspberry Pi """
     TEN_MS_SILENCE = [0x00]
 
     def __init__(self):
         self.__allophone = Gpios(6)
-        self.__address_pins = {'A1':5, 'A2':6, 'A3':13, 'A4':19, 'A5':26, 'A6':21}
-        self.__ald_pin = {'ALD':20}
-        self.__lrq_pin = {'LRQ':16}
+        self.__address_pins = {'A1': 5, 'A2': 6, 'A3': 13, 'A4': 19, 'A5': 26, 'A6': 21}
+        self.__ald_pin = {'ALD': 20}
+        self.__lrq_pin = {'LRQ': 16}
 
         # Use GPIO numbers
         GPIO.setmode(GPIO.BCM)
@@ -35,11 +36,11 @@ class Sp0256al2Driver(object):
             pass
 
     def __get_channel_list(self):
-        return [self.__address_pins['A1'], \
-                self.__address_pins['A2'], \
-                self.__address_pins['A3'], \
-                self.__address_pins['A4'], \
-                self.__address_pins['A5'], \
+        return [self.__address_pins['A1'],
+                self.__address_pins['A2'],
+                self.__address_pins['A3'],
+                self.__address_pins['A4'],
+                self.__address_pins['A5'],
                 self.__address_pins['A6']]
 
     def play_paragraph(self, paragraph):

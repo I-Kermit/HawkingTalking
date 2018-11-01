@@ -9,6 +9,7 @@ from sp0256al2_words import CLOCK_ALLOPHONE_DICTIONARY
 
 PAUSE = [0]
 
+
 def try_clock_allophone(key):
     """Test a clock allophone word exists in the dictionary.
 
@@ -22,6 +23,7 @@ def try_clock_allophone(key):
         return CLOCK_ALLOPHONE_DICTIONARY[key], True
     except KeyError:
         return key, False
+
 
 SIMPLE_CLOCK = SimpleClock()
 TIME = SIMPLE_CLOCK.military_clock()
@@ -42,7 +44,7 @@ for word in TIME.split():
         PARAGRAPH.extend(word_as_allophones)
     else:
         tens, units = divmod(int(word), 10)
-        word_as_allophones, _ = try_clock_allophone(str(tens*10))
+        word_as_allophones, _ = try_clock_allophone(str(tens * 10))
         PARAGRAPH.extend(word_as_allophones)
         PARAGRAPH.extend(PAUSE)
 
@@ -50,6 +52,8 @@ for word in TIME.split():
         PARAGRAPH.extend(word_as_allophones)
 
     PARAGRAPH.extend(PAUSE)
+
+SP0256 = None
 
 try:
     print("Start talking.")
