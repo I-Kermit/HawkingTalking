@@ -49,9 +49,6 @@ class Sp0256al2Driver(object):
         paragraph: Allophones to send to SP0256-AL2
         """
 
-        # Use GPIO numbers
-        GPIO.setmode(GPIO.BCM)
-
         for val in paragraph:
             print('.', end='', flush=True)
             self.__allophone.convert_output(val)
@@ -59,18 +56,19 @@ class Sp0256al2Driver(object):
             self.__ald()
             self.__lrq_wait()
 
-        GPIO.cleanup()
         print('')
 
-    def clean_up(self):
+    def silence(self):
         """
-        clean_up()
+        silence()
         Add this call in your application when keyboard interrupt is received.
         """
 
         self.play_paragraph(self.TEN_MS_SILENCE)
-        print('')
-        print('Cleaning up.')
+        print('\nSilence.')
+
+    def cleanup(self):
+        GPIO.cleanup()
 
     @classmethod
     def print_diagnostics(cls):

@@ -94,7 +94,8 @@ try:
     SP0256 = Sp0256al2Driver()
     SP0256.play_paragraph(PARAGRAPH)
 except KeyboardInterrupt:
-    SP0256.clean_up()
+    SP0256.silence()
 finally:
     print("Stop talking.")
+    SP0256.cleanup()
     sys.exit(0)
